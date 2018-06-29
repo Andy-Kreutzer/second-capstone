@@ -1,5 +1,7 @@
 package com.techelevator;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +41,7 @@ public class CampgroundCLI {
 	private static final String BOOK_RETURN = "Search for Reservation";
 	
 	private static final String BOOK_COMMAND = "Search for Available Reservations";
-	private static final String[] BOOK_OPTIONS = new String[] {CAMPGROUND_COMMAND, BOOK_RETURN};
+	private static final String[] BOOK_OPTIONS = new String[] {BOOK_COMMAND, CAMPGROUND_RETURN};
 	
 	private Menu menu;
 	private ParkDAO parkDAO;
@@ -128,6 +130,13 @@ public class CampgroundCLI {
 		printHeading("Park Information Screen");
 		List<Park> parks = parkDAO.searchParkName(choice);
 		listParkInfo(parks);
+		System.out.println("Select a Command");
+		String campgroundChoice = (String)menu.getChoiceFromOptions(CAMPGROUND_OPTIONS);
+		if(campgroundChoice.equals(CAMPGROUND_COMMAND)) {
+			handleCampgrounds(choice);
+		} else if(campgroundChoice.equals(CAMPGROUND_RESERVATION)) {
+			handleReservations();
+		} 
 	}
 	
 	private void handleCampgrounds(String campgroundChoice) {
@@ -135,29 +144,45 @@ public class CampgroundCLI {
 		List<Campground> allCampgrounds = campgroundDAO.getAllCampgrounds(campgroundChoice);
 		listCampgrounds(allCampgrounds);
 		String campYesNo = (String)menu.getChoiceFromOptions(BOOK_OPTIONS);
-		if(campgroundChoice.equals(BOOK_COMMAND)) {
+		if(campYesNo.equals(BOOK_COMMAND)) {
 			handleBooking(campgroundChoice);
 		} 
 	}
 	
 	private void handleBooking(String campgroundChoice) {
 		printHeading("Search for Campground Reservation");
-		List<Campground> allCampgrounds = campgroundDAO.getAllCampgrounds(campgroundChoice);
-		listCampgrounds(allCampgrounds);
-		
-		Reservation reserve = new Reservation();
-		
-		String campgroundNum = getUserInput("Which campground (enter 0 to cancel)?");
-		String arrivalDate = getUserInput("What is the arrival date?");
-		String departureDate = getUserInput("What is the departure date?");
-		
-		if((arrivalDate.compareTo(reserve.getFrom_date().toString()) >= 0) && (departureDate.compareTo(reserve.getTo_date().toString()) <= 0)) {
-			System.out.println("Sorry, campsite is not available during these dates! Please enter an alternate date range.");
-		}else {
-		
-			
-		}
-		
+//		List<Campground> allCampgrounds = campgroundDAO.getAllCampgrounds(campgroundChoice);
+//		listCampgrounds(allCampgrounds);
+	    List<Site> allSites = siteDAO.getAllSites();
+	    Reservation reserve = new Reservation();
+	    
+	    String campgroundNum = getUserInput("Which campground (enter 0 to cancel)?");	    
+	    Long campgroundNumLong = Long.parseLong(campgroundNum);  
+	    String arrivalDate;
+	    String departureDate;
+	    while(campgroundNumLong != 0) {
+	    	arrivalDate = getUserInput("What is the arrival date? (enter as YYYY/MM/DD)");
+		    departureDate = getUserInput("What is the departure date? (enter as YYYY/MM/DD)");
+		    int arrivalMonth = Integer.parseInt(arrivalDate.substring(5, 7));
+		    int departureMonth = Integer.parseInt(departureDate.substring(5, 7));
+//			    if((arrivalDate.compareTo(reserve.getFrom_date().toString()) >= 0) && (departureDate.compareTo(reserve.getTo_date().toString()) <= 0)) {
+			if(allSites.size() > 0) {
+				List<Site> availableSites = siteDAO.getSitesByCampgroundIdAndDates(campgroundNumLong, reserve.getFrom_date().toString(), reserve.getTo_date().toString());
+				listSites(availableSites);
+			    } else {
+			    	  System.out.println("Sorry, campsite is not available during these dates! Please enter an alternate date range.");
+			    	//siteDAO.getSitesByCampgroundIdAndDates(campgroundNumLong, reserve.getFrom_date().toString(), reserve.getTo_date().toString(), arrivalMonth, departureMonth);			    	
+			    }
+		    }
+	    
+	    String siteNumToReserve = getUserInput("Which site should be reserved (enter 0 to cancel)?");	    
+	    Long siteNumLong = Long.parseLong(campgroundNum);  
+	    Reservation siteId = new Reservation();
+	    LocalDate reservation_date;
+	    while(siteNumLong != 0) {
+	    	String nameToReserve = getUserInput("What name should the reseration be under?");
+	 //   	setReservation(siteNumLong, nameToReserve, arrivalDate, departureDate, reservation_date.getChronology());
+	    }
 	}
 
 	private void handleReservations() {
@@ -178,10 +203,11 @@ public class CampgroundCLI {
 		if(parks.size() > 0) {
 			for(Park park : parks) {
 				System.out.println(park.getName().toString());
-				System.out.println(park.getLocation().toString());
-				System.out.println(park.getEstablishedDate().toString());
-				System.out.println(park.getArea());
-				System.out.println(park.getVisitors());
+				System.out.printf("Location: \t " + park.getLocation().toString() + "\n");
+				System.out.printf("Established: \t " + park.getEstablishedDate().toString() + "\n");
+				System.out.printf("Area: \t \t " + park.getArea() + " " + "sq km" + "\n");
+				System.out.printf("Annual Visitors: " + park.getVisitors() + "\n");
+				System.out.println();
 			}
 		}
 	}
@@ -200,8 +226,25 @@ public class CampgroundCLI {
 	private void listCampgrounds(List<Campground> campgrounds) {
 		System.out.println();
 		if(campgrounds.size() > 0) {
+			System.out.printf("%-5s %-15s %-10s %-10s %-15s\n", " ", "Name", "Open", "Close", "Daily Fee");
 			for(Campground camp : campgrounds) {
-				System.out.println(camp.getName().toString());
+				System.out.printf("%-5s %-15s %-10s %-10s $%-15.2f\n", "#" + camp.getCampground_id(), camp.getName().toString(), camp.getOpen_from_mm(), camp.getOpen_to_mm(), camp.getDaily_fee());
+			}
+		} else {
+			System.out.println("\n*** No results ***");
+		}
+	}
+	
+	private void listSites(List<Site> sites) {
+		System.out.println();
+		if(sites.size() > 0) {
+			for(Site site : sites) {
+				System.out.print(site.getSite_number());
+				System.out.print(site.getMax_occupancy());
+				System.out.print(site.isAccessible());
+				System.out.print(site.getMax_rv_length());
+				System.out.print(site.isUtilities());
+				System.out.println(site.getDailyFee());
 			}
 		} else {
 			System.out.println("\n*** No results ***");
@@ -212,5 +255,11 @@ public class CampgroundCLI {
 		System.out.print(prompt + " >>> ");
 		return new Scanner(System.in).nextLine();
 	}
+	
+	private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 	
 }
