@@ -1,5 +1,6 @@
 package com.techelevator;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -140,13 +141,22 @@ public class CampgroundCLI {
 	}
 	
 	private void handleBooking(String campgroundChoice) {
-		printHeading("All Campgrounds");
+		printHeading("Search for Campground Reservation");
 		List<Campground> allCampgrounds = campgroundDAO.getAllCampgrounds(campgroundChoice);
 		listCampgrounds(allCampgrounds);
-		String campgroundNum = getUserInput("Which campground (enter 0 to cancel)?");
-		String arrivalDate = getUserInput("Which campground (enter 0 to cancel)?");
-		String departureDate = getUserInput("Which campground (enter 0 to cancel)?");
 		
+		Reservation reserve = new Reservation();
+		
+		String campgroundNum = getUserInput("Which campground (enter 0 to cancel)?");
+		String arrivalDate = getUserInput("What is the arrival date?");
+		String departureDate = getUserInput("What is the departure date?");
+		
+		if((arrivalDate.compareTo(reserve.getFrom_date().toString()) >= 0) && (departureDate.compareTo(reserve.getTo_date().toString()) <= 0)) {
+			System.out.println("Sorry, campsite is not available during these dates! Please enter an alternate date range.");
+		}else {
+		
+			
+		}
 		
 	}
 
