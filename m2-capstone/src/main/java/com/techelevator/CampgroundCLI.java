@@ -10,6 +10,8 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.techelevator.jdbc.JDBCCampgroundDAO;
 import com.techelevator.jdbc.JDBCParkDAO;
+import com.techelevator.jdbc.JDBCReservationDAO;
+import com.techelevator.jdbc.JDBCSiteDAO;
 import com.techelevator.menu.Menu;
 
 
@@ -41,6 +43,8 @@ public class CampgroundCLI {
 	private Menu menu;
 	private ParkDAO parkDAO;
 	private CampgroundDAO campgroundDAO;
+	private ReservationDAO reservationDAO;
+	private SiteDAO siteDAO;
 	
 	public static void main(String[] args) {
 		
@@ -57,6 +61,8 @@ public class CampgroundCLI {
 		this.menu = new Menu(System.in, System.out);
 		parkDAO = new JDBCParkDAO(dataSource);
 		campgroundDAO = new JDBCCampgroundDAO(dataSource);
+		reservationDAO = new JDBCReservationDAO(dataSource);
+		siteDAO = new JDBCSiteDAO(dataSource);
 	}
 	
 	public void run() {

@@ -9,3 +9,4 @@ public interface ParkDAO {
 	public List<Park> searchParkName(String inputParkName);
 	
 }
+	
