@@ -226,9 +226,9 @@ public class CampgroundCLI {
 	private void listCampgrounds(List<Campground> campgrounds) {
 		System.out.println();
 		if(campgrounds.size() > 0) {
-			System.out.printf("%-5s %-15s %-10s %-10s %-15s\n", " ", "Name", "Open", "Close", "Daily Fee");
+			System.out.printf("%-5s %-20s %-10s %-10s %-15s\n", " ", "Name", "Open", "Close", "Daily Fee");
 			for(Campground camp : campgrounds) {
-				System.out.printf("%-5s %-15s %-10s %-10s $%-15.2f\n", "#" + camp.getCampground_id(), camp.getName().toString(), camp.getOpen_from_mm(), camp.getOpen_to_mm(), camp.getDaily_fee());
+				System.out.printf("%-5s %-20s %-10s %-10s $%-15.2f\n", "#" + camp.getCampground_id(), camp.getName().toString(), camp.getOpen_from_mm(), camp.getOpen_to_mm(), camp.getDaily_fee());
 			}
 		} else {
 			System.out.println("\n*** No results ***");
