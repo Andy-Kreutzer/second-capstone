@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Reservation {
 	
 	private Long reservation_id;
-	private Long site_id;
+	private int site_id;
 	private String name;
 	private LocalDate from_date;
 	private LocalDate to_date;
@@ -18,10 +18,10 @@ public class Reservation {
 	public void setReservation_id(Long reservation_id) {
 		this.reservation_id = reservation_id;
 	}
-	public Long getSite_id() {
+	public int getSite_id() {
 		return site_id;
 	}
-	public void setSite_id(Long site_id) {
+	public void setSite_id(int site_id) {
 		this.site_id = site_id;
 	}
 	public String getName() {

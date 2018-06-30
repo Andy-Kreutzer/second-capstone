@@ -22,7 +22,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 	
 	
 	@Override
-	public void setReservation(int site_id, String name, String from_date, String to_date, LocalDate create_date) {
+	public void setReservation(int site_id, String name, LocalDate from_date, LocalDate to_date, LocalDate create_date) {
 		String sqlCreateReservation = "INSERT INTO reservation (site_id, name, from_date, to_date, create_date "
 									  + "VALUES (?, ?, ?, ?, ?)";
 			jdbcTemplate.update(sqlCreateReservation, site_id, name, from_date, to_date, create_date);
@@ -32,7 +32,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 		Reservation reservation;
 		reservation = new Reservation();
 		reservation.setReservation_id(results.getLong("reservation_id"));
-		reservation.setSite_id(results.getLong("site_id"));
+		reservation.setSite_id(results.getInt("site_id"));
 		reservation.setName(results.getString("name"));
 		if (results.getDate("from_date") != null) {
 			reservation.setFrom_date((results.getDate("from_date").toLocalDate()));

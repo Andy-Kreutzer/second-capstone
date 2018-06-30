@@ -158,8 +158,8 @@ public class CampgroundCLI {
 	    
 	    String campgroundNum = getUserInput("Which campground (enter 0 to cancel)?");	    
 	    Long campgroundNumLong = Long.parseLong(campgroundNum);  
-	    String arrivalDate;
-	    String departureDate;
+	    String arrivalDate = null;
+	    String departureDate = null;
 	    while(campgroundNumLong != 0) {
 	    	arrivalDate = getUserInput("What is the arrival date? (enter as YYYY/MM/DD)");
 		    departureDate = getUserInput("What is the departure date? (enter as YYYY/MM/DD)");
@@ -167,8 +167,9 @@ public class CampgroundCLI {
 		    int departureMonth = Integer.parseInt(departureDate.substring(5, 7));
 //			    if((arrivalDate.compareTo(reserve.getFrom_date().toString()) >= 0) && (departureDate.compareTo(reserve.getTo_date().toString()) <= 0)) {
 			if(allSites.size() > 0) {
-				List<Site> availableSites = siteDAO.getSitesByCampgroundIdAndDates(campgroundNumLong, reserve.getFrom_date().toString(), reserve.getTo_date().toString());
+				List<Site> availableSites = siteDAO.getSitesByCampgroundIdAndDates(campgroundNumLong, arrivalDate, departureDate);
 				listSites(availableSites);
+				campgroundNumLong = (long) 0;
 			    } else {
 			    	  System.out.println("Sorry, campsite is not available during these dates! Please enter an alternate date range.");
 			    	//siteDAO.getSitesByCampgroundIdAndDates(campgroundNumLong, reserve.getFrom_date().toString(), reserve.getTo_date().toString(), arrivalMonth, departureMonth);			    	
@@ -176,12 +177,14 @@ public class CampgroundCLI {
 		    }
 	    
 	    String siteNumToReserve = getUserInput("Which site should be reserved (enter 0 to cancel)?");	    
-	    Long siteNumLong = Long.parseLong(campgroundNum);  
+	    int siteNumInt = Integer.parseInt(siteNumToReserve);
 	    Reservation siteId = new Reservation();
+	    LocalDate localArrivalDate = LocalDate.parse(arrivalDate);
+	    LocalDate localDepartureDate = LocalDate.parse(departureDate);
 	    LocalDate reservation_date;
-	    while(siteNumLong != 0) {
+	    while(siteNumInt != 0) {
 	    	String nameToReserve = getUserInput("What name should the reseration be under?");
-	 //   	setReservation(siteNumLong, nameToReserve, arrivalDate, departureDate, reservation_date.getChronology());
+	    	reservationDAO.setReservation(siteNumInt, nameToReserve, localArrivalDate, localDepartureDate, LocalDate.now());
 	    }
 	}
 
@@ -238,13 +241,9 @@ public class CampgroundCLI {
 	private void listSites(List<Site> sites) {
 		System.out.println();
 		if(sites.size() > 0) {
+			System.out.printf("%-15s %-10s %-10s %-15s %-15s\n", "Site No.", "Max Occup.", "Accessible?", "Max RV Length", "Utility");
 			for(Site site : sites) {
-				System.out.print(site.getSite_number());
-				System.out.print(site.getMax_occupancy());
-				System.out.print(site.isAccessible());
-				System.out.print(site.getMax_rv_length());
-				System.out.print(site.isUtilities());
-				System.out.println(site.getDailyFee());
+				System.out.printf("%-15s %-10s %-10s %-15s %-15s\n", site.getSite_number(), site.getMax_occupancy(), site.isAccessible(), site.getMax_rv_length(), site.isUtilities());
 			}
 		} else {
 			System.out.println("\n*** No results ***");
