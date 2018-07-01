@@ -17,14 +17,19 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+import com.techelevator.jdbc.JDBCCampgroundDAO;
 import com.techelevator.jdbc.JDBCSiteDAO;
 import model.Site;
 
 public class JDBCSiteDAOIntegrationTest {
 	
+	private static final Long TEST_CAMP_ID = (long) 7;
+	private static final String TEST_ARRIVAL_DATE = "2018-07-01";
+	private static final String TEST_DEPARTURE_DATE = "2018-04-01";
 	private static final Long TEST_SITE_ID = (long) 623;
 	private static SingleConnectionDataSource dataSource;
 	private JDBCSiteDAO siteDAO;
+	private JDBCCampgroundDAO campDAO;
 	
 	@BeforeClass
 	public static void setupDataSource() {
@@ -47,6 +52,7 @@ public class JDBCSiteDAOIntegrationTest {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sqlInsertSite);
 		siteDAO = new JDBCSiteDAO(dataSource);
+		campDAO = new JDBCCampgroundDAO(dataSource);
 	}
 
 	@After
@@ -67,6 +73,9 @@ public class JDBCSiteDAOIntegrationTest {
 	
 	@Test
 	public void get_sites_by_campground_id_and_dates() throws SQLException {
+		Site theSite = getSite(TEST_SITE_ID, (long) 7, 286, 6, true, 0, true);
+		
+		List<Site> results = siteDAO.getSitesByCampgroundIdAndDates(TEST_CAMP_ID, TEST_ARRIVAL_DATE, TEST_DEPARTURE_DATE);
 		
 	}
 	
