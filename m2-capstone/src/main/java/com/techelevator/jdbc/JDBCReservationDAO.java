@@ -8,9 +8,9 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import com.techelevator.Park;
-import com.techelevator.Reservation;
-import com.techelevator.ReservationDAO;
+import model.Park;
+import model.Reservation;
+import model.ReservationDAO;
 
 public class JDBCReservationDAO implements ReservationDAO {
 

@@ -8,8 +8,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import com.techelevator.Campground;
-import com.techelevator.CampgroundDAO;
+import model.Campground;
+import model.CampgroundDAO;
 
 public class JDBCCampgroundDAO implements CampgroundDAO {
 	

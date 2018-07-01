@@ -15,7 +15,16 @@ import com.techelevator.jdbc.JDBCCampgroundDAO;
 import com.techelevator.jdbc.JDBCParkDAO;
 import com.techelevator.jdbc.JDBCReservationDAO;
 import com.techelevator.jdbc.JDBCSiteDAO;
-import com.techelevator.menu.Menu;
+
+import model.Campground;
+import model.CampgroundDAO;
+import model.Park;
+import model.ParkDAO;
+import model.Reservation;
+import model.ReservationDAO;
+import model.Site;
+import model.SiteDAO;
+import view.Menu;
 
 
 public class CampgroundCLI {

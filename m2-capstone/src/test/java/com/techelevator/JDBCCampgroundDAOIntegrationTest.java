@@ -18,6 +18,8 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import com.techelevator.jdbc.JDBCCampgroundDAO;
 
+import model.Campground;
+
 public class JDBCCampgroundDAOIntegrationTest {
 	
 	private static final String TEST_CAMP_NAME = "Test Campground";

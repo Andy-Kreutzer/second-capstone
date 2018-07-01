@@ -1,4 +1,4 @@
-package com.techelevator.menu;
+package view;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
-import com.techelevator.Park;
+import model.Park;
 	
 public class Menu {
 

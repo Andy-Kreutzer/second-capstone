@@ -9,8 +9,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import com.techelevator.Park;
-import com.techelevator.ParkDAO;
+import model.Park;
+import model.ParkDAO;
 
 
 
