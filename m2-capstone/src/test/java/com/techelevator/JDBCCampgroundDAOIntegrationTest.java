@@ -17,15 +17,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import com.techelevator.jdbc.JDBCCampgroundDAO;
+import com.techelevator.jdbc.JDBCParkDAO;
 
 import model.Campground;
+import model.Park;
 
 public class JDBCCampgroundDAOIntegrationTest {
 	
+	private static final String TEST_PARK_NAME = "Test Park";
 	private static final String TEST_CAMP_NAME = "Test Campground";
 	private static final Long TEST_CAMPGROUND_ID = (long) 8;
 	private static SingleConnectionDataSource dataSource;
 	private JDBCCampgroundDAO campgroundDAO;
+	private JDBCParkDAO parkDAO;
 	
 	@BeforeClass
 	public static void setupDataSource() {
@@ -48,6 +52,7 @@ public class JDBCCampgroundDAOIntegrationTest {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sqlInsertCampground);
 		campgroundDAO = new JDBCCampgroundDAO(dataSource);
+		parkDAO = new JDBCParkDAO(dataSource);
 	}
 
 	@After
@@ -59,7 +64,7 @@ public class JDBCCampgroundDAOIntegrationTest {
 	public void get_all_campgrounds() throws SQLException {
 		Campground theCampground = getCampground(TEST_CAMPGROUND_ID, (long) 3, "Test Campground", "01", "12", 40.00);
 		
-		List<Campground> results = campgroundDAO.getAllCampgrounds(TEST_CAMP_NAME);
+		List<Campground> results = campgroundDAO.getAllCampgrounds("Acadia");
 		
 		Assert.assertNotNull(results);
 		Assert.assertEquals(8, results.size());

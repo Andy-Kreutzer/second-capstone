@@ -29,7 +29,6 @@ public class JDBCParkDAO implements ParkDAO {
 									"FROM park "
 								  + "ORDER BY name ASC ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListAllParks);
-		System.out.println("Parks:");
 		while(results.next()) {
 			Park name = mapRowToPark(results);
 			allParks.add(name);
@@ -42,8 +41,8 @@ public class JDBCParkDAO implements ParkDAO {
 		ArrayList<Park> searchPark = new ArrayList<>();
 		String sqlListSearchPark = "SELECT * "
 								+ "FROM park "
-								+ "WHERE name = '" + inputParkName + "'";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListSearchPark);
+								+ "WHERE name = ? ";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListSearchPark, inputParkName);
 		while(results.next()) {
 			Park name = mapRowToPark(results);
 			searchPark.add(name);

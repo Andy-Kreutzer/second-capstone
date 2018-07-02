@@ -1,12 +1,14 @@
 package com.techelevator.jdbc;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 
 import model.Park;
 import model.Reservation;
@@ -23,11 +25,25 @@ public class JDBCReservationDAO implements ReservationDAO {
 	
 	@Override
 	public void setReservation(int site_id, String name, LocalDate from_date, LocalDate to_date, LocalDate create_date) {
-		String sqlCreateReservation = "INSERT INTO reservation (site_id, name, from_date, to_date, create_date "
-									  + "VALUES (?, ?, ?, ?, ?)";
+		String sqlCreateReservation = "INSERT INTO reservation (site_id, name, from_date, to_date, create_date) "
+									  + "VALUES (?, ?, ?, ?, ?) ";
 			jdbcTemplate.update(sqlCreateReservation, site_id, name, from_date, to_date, create_date);
 	}
-
+	
+	@Override
+	public List<Reservation> getReservationId(String name) {
+		ArrayList<Reservation> searchReservationId = new ArrayList<>();
+		String sqlSearchedDepartments =  "SELECT * " +
+										 "FROM reservation "
+										 + "WHERE name LIKE ? ";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlSearchedDepartments, "%" + name + "%");
+		while(results.next()) {
+			Reservation names = mapRowToReservation(results);
+			searchReservationId.add(names);
+		}
+		return searchReservationId; 	
+	}
+	
 	private Reservation mapRowToReservation(SqlRowSet results) {
 		Reservation reservation;
 		reservation = new Reservation();
@@ -45,5 +61,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 		}
 		return reservation;
 	}
-	
+
+
+
 }

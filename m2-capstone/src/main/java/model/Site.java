@@ -9,7 +9,7 @@ public class Site {
 	private boolean accessible;
 	private int max_rv_length;
 	private boolean utilities;
-	private int dailyFee;
+	private double dailyFee;
 	
 	public Long getSite_id() {
 		return site_id;
@@ -53,10 +53,10 @@ public class Site {
 	public void setUtilities(boolean utilities) {
 		this.utilities = utilities;
 	}
-	public int getDailyFee() {
+	public double getDailyFee() {
 		return dailyFee;
 	}
-	public void setDailyFee(int dailyFee) {
+	public void setDailyFee(double dailyFee) {
 		this.dailyFee = dailyFee;
 	}
 	

@@ -29,7 +29,6 @@ public class JDBCSiteDAOIntegrationTest {
 	private static final Long TEST_SITE_ID = (long) 623;
 	private static SingleConnectionDataSource dataSource;
 	private JDBCSiteDAO siteDAO;
-	private JDBCCampgroundDAO campDAO;
 	
 	@BeforeClass
 	public static void setupDataSource() {
@@ -52,7 +51,6 @@ public class JDBCSiteDAOIntegrationTest {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sqlInsertSite);
 		siteDAO = new JDBCSiteDAO(dataSource);
-		campDAO = new JDBCCampgroundDAO(dataSource);
 	}
 
 	@After
@@ -76,6 +74,8 @@ public class JDBCSiteDAOIntegrationTest {
 		Site theSite = getSite(TEST_SITE_ID, (long) 7, 286, 6, true, 0, true);
 		
 		List<Site> results = siteDAO.getSitesByCampgroundIdAndDates(TEST_CAMP_ID, TEST_ARRIVAL_DATE, TEST_DEPARTURE_DATE);
+		
+		Assert.assertEquals(5, results.size());
 		
 	}
 	

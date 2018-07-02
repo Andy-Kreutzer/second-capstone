@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import model.Campground;
 import model.Site;
 import model.SiteDAO;
 
@@ -23,7 +24,6 @@ public class JDBCSiteDAO implements SiteDAO {
 		String sqlListAllParks =  "SELECT * " +
 									"FROM site ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListAllParks);
-		System.out.println("Parks:");
 		while(results.next()) {
 			Site name = mapRowToSite(results);
 			allSites.add(name);
@@ -35,17 +35,17 @@ public class JDBCSiteDAO implements SiteDAO {
 	@Override
 	public List<Site> getSitesByCampgroundIdAndDates(long campgroundId, String arrival, String departure) {
 		ArrayList<Site> siteReservation = new ArrayList<>();
-		String sqlListSites = "SELECT distinct site.site_id, site.campground_id, site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities "
-								   + "FROM site JOIN campground ON site.campground_id = campground.campground_id WHERE site.campground_id = " + campgroundId + " AND site.site_id "
+		String sqlListSites = "SELECT distinct site.site_id, site.campground_id, site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee "
+								   + "FROM site JOIN campground ON site.campground_id = campground.campground_id WHERE site.campground_id = ? AND site.site_id "
 								   + "NOT IN "
 								   + "(SELECT site.site_id FROM site "
 								   + "JOIN reservation ON reservation.site_id = site.site_id "
-								   + "WHERE ((to_date('" + arrival + "', 'YYYY/MM/DD')) <= reservation.to_date AND (to_date('" + departure + "', 'YYYY/MM/DD')) >= reservation.from_date)) "
+								   + "WHERE ((to_date(?, 'YYYY/MM/DD')) <= reservation.to_date AND (to_date(?, 'YYYY/MM/DD')) >= reservation.from_date)) "
 								   + "ORDER BY site.site_number LIMIT 5 ";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListSites);
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListSites, campgroundId, arrival, departure);
 		System.out.println("Sites: ");		
 		while(results.next() ) {
-			Site name = mapRowToSite(results);
+			Site name = mapRowToSite2(results);
 			siteReservation.add(name);
 		}
 		return siteReservation;
@@ -62,10 +62,22 @@ public class JDBCSiteDAO implements SiteDAO {
 		site.setAccessible(results.getBoolean("accessible"));
 		site.setMax_rv_length(results.getInt("max_rv_length"));
 		site.setUtilities(results.getBoolean("utilities"));
-		//site.setDailyFee(results.getInt("f"));
 		return site;
 	}
 
+	private Site mapRowToSite2(SqlRowSet results) {
+		Site site;
+		site = new Site();
+		site.setSite_id(results.getLong("site_id"));
+		site.setCampground_id(results.getLong("campground_id"));
+		site.setSite_number(results.getInt("site_number"));
+		site.setMax_occupancy(results.getInt("max_occupancy"));
+		site.setAccessible(results.getBoolean("accessible"));
+		site.setMax_rv_length(results.getInt("max_rv_length"));
+		site.setUtilities(results.getBoolean("utilities"));
+		site.setDailyFee(results.getDouble("daily_fee"));
+		return site;
+	}
 	
 
 }

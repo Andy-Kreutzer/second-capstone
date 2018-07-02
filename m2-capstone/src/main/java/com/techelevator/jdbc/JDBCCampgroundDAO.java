@@ -25,8 +25,9 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		String sqlListAllCampgrounds =  "SELECT campground_id, campground.park_id, campground.name, open_from_mm, open_to_mm, daily_fee " +
 									"FROM campground "
 									+"JOIN park ON campground.park_id = park.park_id "
-									+ "WHERE park.name = '"	+ campgroundChoice + "'";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListAllCampgrounds);
+									+ "WHERE park.name = ? "
+									+"ORDER BY name ASC ";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListAllCampgrounds, campgroundChoice);
 		System.out.println("Campgrounds: ");
 		while(results.next()) {
 			Campground name = mapRowToCampground(results);
