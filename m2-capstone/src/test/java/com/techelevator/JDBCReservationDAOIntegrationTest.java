@@ -1,7 +1,6 @@
 package com.techelevator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
@@ -10,25 +9,19 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
-import com.techelevator.jdbc.JDBCCampgroundDAO;
 import com.techelevator.jdbc.JDBCReservationDAO;
-import com.techelevator.jdbc.JDBCSiteDAO;
 
 import model.Reservation;
-import model.Site;
 
 public class JDBCReservationDAOIntegrationTest {
 	
 	private static final String TEST_RESERVATION_NAME = "Smith Test Family";
-	private static final String TEST_RESERVATION_NAME2 = "Tech Elevator";
-	private static final int TEST_SITE_ID = 1;
 	private static final Long TEST_RESERVATION_ID = (long) 61;
 	private static SingleConnectionDataSource dataSource;
 	private JDBCReservationDAO reservationDAO;

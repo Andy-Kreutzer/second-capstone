@@ -6,7 +6,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import model.Campground;
 import model.Site;
 import model.SiteDAO;
 
@@ -33,7 +32,7 @@ public class JDBCSiteDAO implements SiteDAO {
 	
 	
 	@Override
-	public List<Site> getSitesByCampgroundIdAndDates(long campgroundId, String arrival, String departure) {
+	public List<Site> getSitesByCampgroundIdAndDates(long campgroundId, String arrival, String departure, int arrivalMonth, int departureMonth) {
 		ArrayList<Site> siteReservation = new ArrayList<>();
 		String sqlListSites = "SELECT distinct site.site_id, site.campground_id, site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee "
 								   + "FROM site JOIN campground ON site.campground_id = campground.campground_id WHERE site.campground_id = ? AND site.site_id "
@@ -41,8 +40,9 @@ public class JDBCSiteDAO implements SiteDAO {
 								   + "(SELECT site.site_id FROM site "
 								   + "JOIN reservation ON reservation.site_id = site.site_id "
 								   + "WHERE ((to_date(?, 'YYYY/MM/DD')) <= reservation.to_date AND (to_date(?, 'YYYY/MM/DD')) >= reservation.from_date)) "
+								   + "AND ? > CAST(campground.open_from_mm AS int) AND ? < CAST(campground.open_to_mm AS int) "
 								   + "ORDER BY site.site_number LIMIT 5 ";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListSites, campgroundId, arrival, departure);
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlListSites, campgroundId, arrival, departure, arrivalMonth, departureMonth);
 		System.out.println("Sites: ");		
 		while(results.next() ) {
 			Site name = mapRowToSite2(results);

@@ -9,8 +9,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-
-import model.Park;
 import model.Reservation;
 import model.ReservationDAO;
 

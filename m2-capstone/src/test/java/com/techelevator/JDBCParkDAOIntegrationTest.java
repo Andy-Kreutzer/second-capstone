@@ -1,8 +1,6 @@
 package com.techelevator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
 import java.time.LocalDate;

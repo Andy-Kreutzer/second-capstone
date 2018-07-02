@@ -1,11 +1,8 @@
 package com.techelevator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.After;
@@ -17,12 +14,13 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
-import com.techelevator.jdbc.JDBCCampgroundDAO;
 import com.techelevator.jdbc.JDBCSiteDAO;
 import model.Site;
 
 public class JDBCSiteDAOIntegrationTest {
 	
+	private static final int TEST_DEPARTURE_MONTH = 4;
+	private static final int TEST_ARRIVAL_MONTH = 7;
 	private static final Long TEST_CAMP_ID = (long) 7;
 	private static final String TEST_ARRIVAL_DATE = "2018-07-01";
 	private static final String TEST_DEPARTURE_DATE = "2018-04-01";
@@ -73,9 +71,10 @@ public class JDBCSiteDAOIntegrationTest {
 	public void get_sites_by_campground_id_and_dates() throws SQLException {
 		Site theSite = getSite(TEST_SITE_ID, (long) 7, 286, 6, true, 0, true);
 		
-		List<Site> results = siteDAO.getSitesByCampgroundIdAndDates(TEST_CAMP_ID, TEST_ARRIVAL_DATE, TEST_DEPARTURE_DATE);
+		List<Site> results = siteDAO.getSitesByCampgroundIdAndDates(TEST_CAMP_ID, TEST_ARRIVAL_DATE, TEST_DEPARTURE_DATE, TEST_ARRIVAL_MONTH, TEST_DEPARTURE_MONTH);
 		
 		Assert.assertEquals(5, results.size());
+		
 		
 	}
 	
